@@ -31,16 +31,6 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @Column
-    private String email;
-
-    @Column(nullable = false)
-    private String password;
-
-    @Enumerated(value = EnumType.STRING)
-    @Column(name = "role")
-    private Role role;
-
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Order> orderList;
 

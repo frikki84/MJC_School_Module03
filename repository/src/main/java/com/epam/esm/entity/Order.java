@@ -44,7 +44,7 @@ public class Order {
     private LocalDateTime date;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {
-            CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH
+            CascadeType.PERSIST
     })
     @JoinTable(
             name = "users_order_has_certificate",
