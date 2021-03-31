@@ -23,6 +23,7 @@ import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.TagDto;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.GiftCertificateDtoValidationException;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.CertificateDtoMapper;
@@ -89,7 +90,7 @@ class GiftCertificateServiceTest {
 
     @Test
     void createNegative() {
-        Mockito.when(pageValidation.checkPageInfo(OFFSET, LIMIT))
+        Mockito.when(pageValidation.checkPageInfo(OFFSET, LIMIT, CustomErrorCode.CERTIFICATE))
                 .thenThrow(GiftCertificateDtoValidationException.class);
         Mockito.when(giftCertificateRepository.create(certificate)).thenReturn(certificate);
         Mockito.when(mapper.changeDtoToCertificate(dto)).thenReturn(certificate);

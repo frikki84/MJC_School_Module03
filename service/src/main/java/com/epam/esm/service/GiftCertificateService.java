@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,21 +39,25 @@ public class GiftCertificateService implements CrdService<GiftCertificateDto> {
     private final TagDtoMapper tagDtoMapper;
     private final GiftCertificateDtoValidation certificateValidation;
 
+
+
     public GiftCertificateService(GiftCertificateRepository giftCertificateRepository, CertificateDtoMapper mapper,
             PageInfoValidation pageValidation, TagRepository tagRepository, SearchParamterDtoMapper paramterDtoMapper,
             TagDtoMapper tagDtoMapper, GiftCertificateDtoValidation certificateValidation) {
         this.giftCertificateRepository = giftCertificateRepository;
         this.mapper = mapper;
         this.pageValidation = pageValidation;
+        pageValidation.setCrdOperations(giftCertificateRepository);
         this.tagRepository = tagRepository;
         this.paramterDtoMapper = paramterDtoMapper;
         this.tagDtoMapper = tagDtoMapper;
         this.certificateValidation = certificateValidation;
+
     }
 
     @Override
     public List<GiftCertificateDto> findAll(int offset, int limit) {
-        pageValidation.checkPageInfo(offset, limit);
+        pageValidation.checkPageInfo(offset, limit, CustomErrorCode.CERTIFICATE);
         return giftCertificateRepository.findAll(offset, limit)
                 .stream()
                 .map(mapper::changeCertificateToDto)
@@ -62,8 +65,7 @@ public class GiftCertificateService implements CrdService<GiftCertificateDto> {
     }
 
     public List<GiftCertificateDto> findAll(SearchGiftCertificateParameterDto parametrDto, int offset, int limit) {
-
-        pageValidation.checkPageInfo(offset, limit);
+        pageValidation.checkPageInfo(offset, limit, CustomErrorCode.CERTIFICATE);
         if (Objects.isNull(parametrDto) || parametrDto.isEmpty()) {
             return findAll(offset, limit);
         }
@@ -165,20 +167,15 @@ public class GiftCertificateService implements CrdService<GiftCertificateDto> {
 
     private List<Tag> createTagListWithAdditionalTags(GiftCertificate giftCertificateFromDb,
             GiftCertificate updatedGiftCertificate) {
-        List<Tag> newTagList = giftCertificateFromDb.getTags();
-        List<String> tagNames = new ArrayList<>();
-        for (Tag tag : newTagList) {
-            tagNames.add(tag.getNameTag());
-        }
-        for (Tag tag : updatedGiftCertificate.getTags()) {
-            if (!tagNames.contains(tag.getNameTag())) {
-                newTagList.add(tag);
+        List<Tag> newTags = updatedGiftCertificate.getTags();
+        List<Tag> correctList = newTags.stream().map(tag -> checkTagOperation(tag)).collect(Collectors.toList());
+        for (Tag tag : giftCertificateFromDb.getTags()) {
+            if (!correctList.contains(tag)) {
+                correctList.add(tag);
             }
         }
-        System.out.println("newTagList " + newTagList);
-        List<Tag> tags = newTagList.stream().map(tag -> checkTagOperation(tag)).collect(Collectors.toList());
-        System.out.println(tags);
-        return tags;
+
+        return correctList;
     }
 
 }

@@ -25,6 +25,7 @@ import com.epam.esm.service.mapper.OrderDtoMapper;
 import com.epam.esm.service.validation.PageInfoValidation;
 
 @Service
+@Transactional
 public class OrderService {
 
     @Autowired
@@ -41,10 +42,11 @@ public class OrderService {
         this.userRepository = userRepository;
         this.certificateRepository = certificateRepository;
         this.pageInfoValidation = pageInfoValidation;
+        pageInfoValidation.setCrdOperations(orderRepository);
     }
 
     public List<OrderDto> findAll(int offset, int limit) {
-        pageInfoValidation.checkPageInfo(offset, limit);
+        pageInfoValidation.checkPageInfo(offset, limit, CustomErrorCode.ORDER);
         return orderRepository.findAll(offset, limit)
                 .stream()
                 .map(order -> orderMapper.chandeOrderToDto(order))

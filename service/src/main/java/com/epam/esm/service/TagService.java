@@ -4,10 +4,10 @@ import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.TagDto;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.repository.UserRepository;
-import com.epam.esm.service.CrdService;
 import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.TagDtoMapper;
+import com.epam.esm.service.validation.PageInfoValidation;
 import com.epam.esm.service.validation.TagValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,16 +26,21 @@ public class TagService implements CrdService<TagDto> {
     private final TagDtoMapper mapper;
     private final UserRepository userRepository;
     private final TagValidation tagValidation;
+    private final PageInfoValidation pageValidation;
 
-    public TagService(TagRepository tagRepository, TagDtoMapper mapper, UserRepository userRepository, TagValidation tagValidation) {
+    public TagService(TagRepository tagRepository, TagDtoMapper mapper, UserRepository userRepository,
+            TagValidation tagValidation, PageInfoValidation pageValidation) {
         this.tagRepository = tagRepository;
         this.mapper = mapper;
         this.userRepository = userRepository;
         this.tagValidation = tagValidation;
+        this.pageValidation = pageValidation;
+        pageValidation.setCrdOperations(tagRepository);
     }
 
     @Override
     public List<TagDto> findAll(int offset, int limit) {
+        pageValidation.checkPageInfo(offset, limit, CustomErrorCode.TAG);
         return tagRepository.findAll(offset, limit).stream().map(tag -> mapper.changeTagToTagDto(tag)).collect(Collectors.toList());
     }
 

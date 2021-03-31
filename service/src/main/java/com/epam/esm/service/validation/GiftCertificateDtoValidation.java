@@ -69,7 +69,7 @@ public class GiftCertificateDtoValidation {
         if (Objects.nonNull(dto.getDuration()) && dto.getDuration().compareTo(Integer.parseInt(MIN_DURATION)) < 0) {
             throw new GiftCertificateDtoValidationException(INVALID_DTO_DURATION);
         }
-        if (Objects.nonNull(dto.getTagList()) || !dto.getTagList().isEmpty()) {
+        if (Objects.nonNull(dto.getTagList()) && !dto.getTagList().isEmpty()) {
             dto.getTagList().forEach(tagDto -> tagValidation.chechTagDtoFormat(tagDto));
         }
         return result;

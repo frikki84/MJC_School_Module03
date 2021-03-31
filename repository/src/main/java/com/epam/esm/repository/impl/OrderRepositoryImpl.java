@@ -20,6 +20,8 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     public static final int OFFSET_DEFAULT_VALUE = 1;
     public static final String PARAMETER_NAME_FOR_FINDING_ORDERS_BY_USER = "user";
+    public static final String DELETE_ORDER_FROM_CERTIFICATES = "DELETE FROM users_order_has_certificate OHC WHERE OHC.order_id=?";
+
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -50,6 +52,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public long delete(long id) {
+        //entityManager.createNativeQuery(DELETE_ORDER_FROM_CERTIFICATES).setParameter(1, id).executeUpdate();
         entityManager.remove(findById(id));
         return id;
     }

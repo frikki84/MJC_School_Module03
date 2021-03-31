@@ -85,7 +85,6 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     @Override
     public GiftCertificate update(GiftCertificate giftCertificate) {
         entityManager.merge(giftCertificate);
-        //entityManager.flush();
         return findById(giftCertificate.getId());
     }
 

@@ -76,9 +76,7 @@ class TagServiceTest {
         Tag tag = new Tag();
         TagDto dto = new TagDto();
         dto.setNameTag(TAG_NAME);
-        List<Tag> tags = new ArrayList<>();
-        Mockito.when(tagValidation.chechTagDtoFormat(dto)).thenReturn(true);
-        Mockito.when(tagRepository.findByName(TAG_NAME)).thenReturn(tags);
+         Mockito.when(tagValidation.chechTagDtoFormat(dto)).thenReturn(true);
         Mockito.when(tagRepository.create(tag)).thenReturn(tag);
         Mockito.when(mapper.changeTagToTagDto(tag)).thenReturn(dto);
         assertEquals(dto, tagService.create(dto));

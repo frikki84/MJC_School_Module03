@@ -43,9 +43,7 @@ public class Order {
     @Column(name = "purchase_date", nullable = false)
     private LocalDateTime date;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {
-            CascadeType.PERSIST
-    })
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "users_order_has_certificate",
             joinColumns = @JoinColumn(name = "order_id", nullable = false),

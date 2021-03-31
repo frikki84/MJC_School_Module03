@@ -1,21 +1,24 @@
 package com.epam.esm.repository.impl;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.ListJoin;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.User;
 import com.epam.esm.repository.TagRepository;
-
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.*;
-
-import java.util.List;
-import java.util.Objects;
 
 @Repository
 @Transactional
@@ -27,7 +30,6 @@ public class TagRepositoryImpl implements TagRepository {
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "nameTag";
     private static final int POSITION_WITH_MAX_VALUE = 1;
-    private static final String SQL_FIND_TAG_BY_NAME = "select t.id, t.nameTag from Tag t where t.name = ?";
 
     @PersistenceContext
     EntityManager entityManager;

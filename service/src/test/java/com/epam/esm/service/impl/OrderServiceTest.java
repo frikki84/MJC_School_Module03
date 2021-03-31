@@ -25,6 +25,7 @@ import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.OrderRepository;
 import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.OrderService;
+import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.OrderDtoMapper;
 import com.epam.esm.service.validation.PageInfoValidation;
@@ -51,7 +52,7 @@ class OrderServiceTest {
 
     @Test
     void findAll() {
-        Mockito.when(pageInfoValidation.checkPageInfo(OFFSET, LIMIT)).thenReturn(true);
+        Mockito.when(pageInfoValidation.checkPageInfo(OFFSET, LIMIT, CustomErrorCode.TAG)).thenReturn(true);
 
     }
 

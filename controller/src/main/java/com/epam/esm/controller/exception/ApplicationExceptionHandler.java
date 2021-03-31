@@ -18,11 +18,13 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.epam.esm.service.exception.CustomErrorCode;
+import com.epam.esm.service.exception.CustomErrorExeption;
 import com.epam.esm.service.exception.ExceptionDetails;
 import com.epam.esm.service.exception.GiftCertificateDtoValidationException;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.exception.PageException;
 import com.epam.esm.service.exception.TagValidationException;
+import com.epam.esm.service.exception.UserValidationException;
 
 @ControllerAdvice
 public class ApplicationExceptionHandler {
@@ -48,6 +50,11 @@ public class ApplicationExceptionHandler {
         return createResponseEntity(HttpStatus.BAD_REQUEST, exception, CustomErrorCode.TAG);
     }
 
+    @ExceptionHandler(UserValidationException.class)
+    public ResponseEntity<ExceptionDetails> handleUserValidationException(UserValidationException exception) {
+        return createResponseEntity(HttpStatus.BAD_REQUEST, exception, CustomErrorCode.USER);
+    }
+
     @ExceptionHandler(GiftCertificateDtoValidationException.class)
     public ResponseEntity<ExceptionDetails> handleGiftCertificateDtoValidationException(
             GiftCertificateDtoValidationException exception) {
@@ -56,7 +63,7 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler(PageException.class)
     public ResponseEntity<ExceptionDetails> handlePageException(PageException exception) {
-        return createResponseEntity(HttpStatus.BAD_REQUEST, exception, CustomErrorCode.CERTIFICATE);
+        return createResponseEntity(HttpStatus.BAD_REQUEST, exception);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
@@ -85,9 +92,16 @@ public class ApplicationExceptionHandler {
         return bundleMessage;
     }
 
-    private ResponseEntity createResponseEntity(HttpStatus status, NoSuchResourceException exception,
+    private ResponseEntity createResponseEntity(HttpStatus status, CustomErrorExeption exception,
             String exceptionMessage) {
         String message = getErrorResponse(exceptionMessage);
+        String errorCode = status.value() + exception.getCode();
+        ExceptionDetails data = new ExceptionDetails(LocalDateTime.now(), status.value(), message, errorCode);
+        return new ResponseEntity<>(data, status);
+    }
+
+    private ResponseEntity createResponseEntity(HttpStatus status, CustomErrorExeption exception) {
+        String message = getErrorResponse(exception.getMessage());
         String errorCode = status.value() + exception.getCode();
         ExceptionDetails data = new ExceptionDetails(LocalDateTime.now(), status.value(), message, errorCode);
         return new ResponseEntity<>(data, status);
