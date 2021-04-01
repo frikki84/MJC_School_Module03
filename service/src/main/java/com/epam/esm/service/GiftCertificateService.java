@@ -77,7 +77,14 @@ public class GiftCertificateService implements CrdService<GiftCertificateDto> {
                 .collect(Collectors.toList());
     }
 
-    @Override
+
+    public long findNumberOfEntities(SearchGiftCertificateParameterDto parametrDto) {
+        SearchGiftCertificateParameter parametr = paramterDtoMapper.changeDtoToSearchGiftSertificateParametr(
+                parametrDto);
+        return giftCertificateRepository.getCountOfEntities(parametr);
+    }
+
+
     public long findNumberOfEntities() {
         return giftCertificateRepository.findNumberOfEntities();
     }

@@ -96,6 +96,12 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
         return entityManager.createQuery(query).getSingleResult();
     }
 
+    @Override
+    public long getCountOfEntities(SearchGiftCertificateParameter parameter) {
+        CriteriaQuery<GiftCertificate> criteriaQuery = criteriaBuilder.buildQuery(parameter);
+        return entityManager.createQuery(criteriaQuery).getResultList().size();
+    }
+
     private void addNewTags(GiftCertificate certificate) {
         List<Tag> tagList = certificate.getTags();
         List<Tag> checkedTagListInDb = tagList.stream()

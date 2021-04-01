@@ -63,7 +63,7 @@ public class GiftCertificateController {
             @RequestBody SearchGiftCertificateParameterDto parameter) {
         List<GiftCertificateDto> list = giftCertificateService.findAll(parameter, page, size);
         hateoasBuilder.addLinksToGiftCertificateList(list);
-        return paginationBuilder.addPagination(list, page, size, giftCertificateService.findNumberOfEntities());
+        return paginationBuilder.addPagination(list, page, size, giftCertificateService.findNumberOfEntities(parameter));
     }
 
     @PostMapping

@@ -11,4 +11,6 @@ public interface GiftCertificateRepository extends CrdOperations<GiftCertificate
 
     public GiftCertificate update(GiftCertificate giftCertificate);
 
+    public long getCountOfEntities(SearchGiftCertificateParameter parameter);
+
 }

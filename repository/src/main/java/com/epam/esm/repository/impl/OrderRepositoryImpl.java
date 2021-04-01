@@ -1,16 +1,20 @@
 package com.epam.esm.repository.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.repository.OrderRepository;
 
@@ -20,8 +24,6 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     public static final int OFFSET_DEFAULT_VALUE = 1;
     public static final String PARAMETER_NAME_FOR_FINDING_ORDERS_BY_USER = "user";
-    public static final String DELETE_ORDER_FROM_CERTIFICATES = "DELETE FROM users_order_has_certificate OHC WHERE OHC.order_id=?";
-
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -74,4 +76,5 @@ public class OrderRepositoryImpl implements OrderRepository {
                 .where(criteriaBuilder.equal(root.get(PARAMETER_NAME_FOR_FINDING_ORDERS_BY_USER), userID));
         return entityManager.createQuery(orderQuery).getResultList();
     }
+
 }
