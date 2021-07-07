@@ -1,2 +1,4 @@
-rootProject.name = 'Module03_14.02'
+rootProject.name = 'module04'
+include('repository', 'service', 'controller')
+
 

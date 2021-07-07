@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.2'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.8.0'
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.8.0'
+
+    implementation project(':repository')
+
+
+}
+bootJar{
+    enabled = false
+}
+
+
+
+
+
